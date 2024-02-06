@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, Text, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Appbar, Card } from 'react-native-paper';
@@ -11,6 +11,16 @@ export default function SignupPage() {
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [signupDisabled, setSignupDisabled] = useState(true);
+
+  // Function to check if all input fields are filled
+  const checkInputsFilled = () => {
+    return name.trim() !== '' && email.trim() !== '' && password.trim() !== '' && phone.trim() !== '';
+  };
+
+  // Update signupDisabled state based on input fields
+  useEffect(() => {
+    setSignupDisabled(!checkInputsFilled());
+  }, [name, email, password, phone]);
 
   const handleSignup = async () => {
     try {
@@ -46,16 +56,6 @@ export default function SignupPage() {
       console.error('Error signing up:', error);
     }
   };
-
-  // Function to check if all input fields are filled
-  const checkInputsFilled = () => {
-    return name.trim() !== '' && email.trim() !== '' && password.trim() !== '' && phone.trim() !== '';
-  };
-
-  // Update signupDisabled state based on input fields
-  useState(() => {
-    setSignupDisabled(!checkInputsFilled());
-  }, [name, email, password, phone]);
 
   return (
     <View style={styles.container}>
